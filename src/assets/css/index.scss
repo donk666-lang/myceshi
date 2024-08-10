@@ -1,0 +1,61 @@
+.box{
+    width: 75%;
+    margin: 0 auto;
+    overflow-y: auto;
+    padding: 20px 0;
+    .search{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .list{
+        margin: 20px 0;
+        cursor: pointer;
+        .listMain{
+          display: flex; 
+          justify-content: space-between;
+        }
+        .listText{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 100px;
+        }
+    }
+    /* 媒体查询 */
+      @media (max-width: 999px) {
+        .list {
+          width: 98%; /* 当宽度小于999px时，列表宽度设置为98% */
+          margin: 0 auto; /* 居中对齐 */
+        }
+      }
+    .listMain {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+    }
+    
+    .image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+    }
+    
+    .lazy-image {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Center the loading and error images */
+    .lazy-image::before,
+    .lazy-image::after {
+      content: '';
+      display: block;
+      width: 200px;
+      height: 100px;
+      text-align: center;
+    }
+   
+}
