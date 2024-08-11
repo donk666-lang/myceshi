@@ -45,45 +45,50 @@
           </div>
         </el-card>
       </div>
-      <div v-if="loading" class="loading">加载中...</div>
+    </div>
+    <div class="pagination">
+      <el-pagination
+        v-model:current-page="currentPage"
+        background
+        :page-size="pageSize"
+        :total="totalItems"
+        layout="total, prev, pager, next"
+        @current-change="handlePageChange"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, nextTick, onUnmounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import { Search } from '@element-plus/icons-vue';
-import dataArray from '../../components/data';
-import { DataItem } from '../../components/data';
+import dataArray, { DataItem } from '../../components/data';
 import { useRouter } from 'vue-router';
-const router = useRouter();
 
-const pageSize = 6; // 初始加载的条目数
+const router = useRouter();
+const pageSize = 6; // 每页显示的条目数
 const currentPage = ref(1); // 当前页
 const selectedTitles = ref<string[]>([]);
 const filterKeyword = ref<string>('');
 const loading = ref(false);
-const items = ref<DataItem[]>([]); // 当前显示的数据项
+const items = ref<DataItem[]>(dataArray); // 使用全部数据
+const totalItems = computed(() => filteredData.value.length); // 总条目数
 
 const handleInput = () => {
-  if (selectedTitles.value.length === 0) {
-    filterKeyword.value = '';
-  } else {
-    filterKeyword.value = selectedTitles.value.join(',');
-  }
+  filterKeyword.value = selectedTitles.value.join(',');
 };
 
-const handleSearch = () => {
-  if (selectedTitles.value.length === 0) {
-    filterKeyword.value = '';
-  } else {
-    filterKeyword.value = selectedTitles.value.join(',');
-  }
+const handleSearch = async () => {
+  filterKeyword.value = selectedTitles.value.join(',');
   console.log('搜索关键词:', filterKeyword.value);
+
+  // 在搜索后预加载图片
+  await preloadImages(filteredData.value);
 };
 
 const filteredData = computed(() => {
-  if (!filterKeyword.value) {
+  if (selectedTitles.value.length === 0) {
+    // 如果搜索框为空数组，则返回全部数据
     return items.value;
   }
 
@@ -92,38 +97,27 @@ const filteredData = computed(() => {
     selectedTitles.value.some(title => item.title.includes(title))
   );
 });
-const onList = (item:any) => {
-   // 将 item 对象传递到新的路由
-   router.push({
-    name: 'demo3', // 替换为你的目标路由名称
-    query: { item: JSON.stringify(item) } // 将对象转换为字符串传递
+
+const handlePageChange = async (page: number) => {
+  currentPage.value = page;
+  await nextTick();
+  const currentPageItems = paginatedData.value;
+  await preloadImages(currentPageItems);
+};
+
+const onList = (item: any) => {
+  // 通过ID跳转到详情页面
+  router.push({
+    name: 'demo3',
+    params: { id: item.id.toString() }
   });
-}
+};
+
 const paginatedData = computed(() => {
-  const start = 0;
+  const start = (currentPage.value - 1) * pageSize;
   const end = currentPage.value * pageSize;
   return filteredData.value.slice(start, end);
 });
-
-const handleScroll = async () => {
-  const scrollTop = window.scrollY;
-  const scrollHeight = document.documentElement.scrollHeight;
-  const clientHeight = window.innerHeight;
-
-  if (scrollTop + clientHeight >= scrollHeight - 10 && !loading.value) {
-    loading.value = true;
-    await nextTick();
-    loadMoreData();
-    loading.value = false;
-  }
-};
-
-const loadMoreData = async () => {
-  const nextPageItems = dataArray.slice(currentPage.value * pageSize, (currentPage.value + 1) * pageSize);
-  items.value.push(...nextPageItems);
-  await preloadImages(nextPageItems);
-  currentPage.value += 1;
-};
 
 const preloadImages = async (itemsToLoad: DataItem[]) => {
   const promises = itemsToLoad.map(item => simulateImageLoading(item));
@@ -141,12 +135,8 @@ const simulateImageLoading = (item: DataItem) => {
 };
 
 onMounted(async () => {
-  window.addEventListener('scroll', handleScroll);
-  loadMoreData();
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
+  // 初次加载时不需要进行任何操作，因为 items 已经包含了全部数据
+  await preloadImages(paginatedData.value);
 });
 </script>
 
@@ -165,9 +155,17 @@ onUnmounted(() => {
   align-items: center;
   width: 40%;
 }
-
+.pagination{
+  margin: 20px auto;width: 50%;
+}
+@media screen and (max-width: 999px) {
+      .pagination {
+        width: 98%; /* 当宽度小于999px时，列表宽度设置为98% */
+        margin: 0 auto; /* 居中对齐 */
+      }
+    }
 .content {
-  width: 100%; /* 设置你想要的宽度 */
+  width: 100%;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -176,17 +174,12 @@ onUnmounted(() => {
   white-space: normal;
 }
 
-.loading {
-  text-align: center;
-  padding: 10px;
-}
-
 .loaded-image {
-  width: 100%; /* 你可以根据需要设置图片的样式 */
+  width: 100%;
 }
 
 .loading-image {
-  width: 100%; /* 你可以根据需要设置占位图片的样式 */
+  width: 100%;
 }
 
 </style>

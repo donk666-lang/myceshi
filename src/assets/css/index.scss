@@ -22,19 +22,6 @@
           height: 100px;
         }
     }
-    /* 媒体查询 */
-      @media (max-width: 999px) {
-        .list {
-          width: 98%; /* 当宽度小于999px时，列表宽度设置为98% */
-          margin: 0 auto; /* 居中对齐 */
-        }
-      }
-    .listMain {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      
-    }
     
     .image-container {
       display: flex;
@@ -59,3 +46,10 @@
     }
    
 }
+     /* 媒体查询 */
+     @media screen and (max-width: 999px) {
+      .box {
+        width: 98%; /* 当宽度小于999px时，列表宽度设置为98% */
+        margin: 0 auto; /* 居中对齐 */
+      }
+    }

@@ -23,13 +23,13 @@
 <script lang="ts" setup>
 import {onMounted,ref} from 'vue';
 import { useRoute } from 'vue-router';
+import dataArray from '../../components/data'; // 假设数据在这个文件
 const route = useRoute();
 const listDetail:any = ref('')
 onMounted(() => {
-    let data:any = route.params
-  if (data) {
-    listDetail.value = JSON.parse(data.item)
-  }
+    const id = route.query.id as string;
+  listDetail.value = dataArray.find((item: any) => item.id.toString() === id) || null;
+  console.log(listDetail.value, 'listDetail.value');
 });
 </script>
 <style lang="scss" scoped>
@@ -56,4 +56,11 @@ onMounted(() => {
         }
     }
 }
+ /* 媒体查询 */
+ @media screen and (max-width: 999px) {
+      .detailBox {
+        width: 98%; /* 当宽度小于999px时，列表宽度设置为98% */
+        margin: 0 auto; /* 居中对齐 */
+      }
+    }
 </style>
