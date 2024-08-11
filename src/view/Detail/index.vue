@@ -26,10 +26,9 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const listDetail:any = ref('')
 onMounted(() => {
-  if (route.params) {
-    console.log(route.query,'route.params')
-    listDetail.value = JSON.parse(route.query.item)
-    console.log(listDetail.value,'listDetail.value')
+    let data:any = route.params
+  if (data) {
+    listDetail.value = JSON.parse(data.item)
   }
 });
 </script>
