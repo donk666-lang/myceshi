@@ -109,7 +109,7 @@ const onList = (item: any) => {
   // 通过ID跳转到详情页面
   router.push({
     name: 'demo3',
-    params: { id: item.id.toString() }
+    query: { id: item.id }
   });
 };
 
