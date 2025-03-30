@@ -1,13 +1,14 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-</script>
-
 <template>
-  <router-view></router-view>
+  <div id="app">
+    <dv-full-screen-container>
+      <router-view />
+    </dv-full-screen-container>
+    
+  </div>
 </template>
-<style>
-body {
-  margin: 0;
+
+<script>
+export default {
+  name: 'App'
 }
-</style>
+</script>

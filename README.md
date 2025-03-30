@@ -1,127 +1,75 @@
 ## 简介
-项目采用  Vue3 + Typescript + Vite + ElementPlus
 
-主要用来 学习 vite TS 和 vue3 的新特性 
+基于 vue2 和 datav 的大屏可视化模板
+
+## 特别说明
+
+> 该模板默认你有 vue2 + vuex + vue-router + axios  项目基础
+
+> 如果你只关注大屏页面本身，即 views -> dashboard -> index.vue，那么只需要你有 vue2 基础即可
+
+该项目完全基于花裤衩大佬的 [vue-admin-template](https://github.com/PanJiaChen/vue-admin-template) 进行精简改造，没什么技术含量。
+
+大屏代码在 views -> dashboard -> index.vue，而其他文件（比如 api、store、utils）只是备用，该模板暂时还没有用到。
+
+## 温馨提示
+
+- 没有用过类似 [vue-admin-template](https://github.com/PanJiaChen/vue-admin-template) 项目经验的朋友可能依旧会觉得该模板比较 "臃肿"
+
+- [DataV](https://github.com/DataV-Team/DataV) 是一个很好用的大屏可视化组件库，可以预先阅读一下它的文档
 
 ## 开发
+
 ```bash
-#下载包 
-npm install
+# 克隆项目
+git clone https://github.com/un-pany/v2-datav-template.git
 
-# 启动
-npm run dev
+# 进入项目目录
+cd v2-datav-template
 
+# 安装依赖
+yarn
 
+# 启动服务
+yarn dev
 ```
 
+## 多环境打包
 
-
-## ts语法笔记
 ```bash
-类型 --  例子 --  备注
+# 构建预发布环境
+yarn build:stage
 
-1. number   let a = 123  数字
-2. string   let a = '123'  字符串
-3. boolean  let a = true   布尔值
-4. 字面量    let a: 'max' | 'min'  字面量类型
-5. any      let a   任意类型 可以赋值给任何值
-6. unknown  let a:nuknow   不知道的类型  赋值给其他类型会报错  
-7. 类型断言  s = a as string; ||  s = <string>a
-
-8. void   function f(): void{}   函数返回空值   null | undefined
-9. never  function f(): never{}   函数永远不会有返回结果  少见   
-
-
-10. object
-  # 在属性后面添加 ？ 表示属性是可选的
-  let b:{name: string, age?:number }
-  b = {name: 'aaa', age:18 }
-  # [propName: string]: any 表示 仍以类型的属性
-  let c:{name: string, [propName: string]: any}
-
-  #设置函数结构的类型申明
-  let f: (a:number, b:number)=>number
-
-11. array
-  #  string[] | Array<string>  表示字符串类型的数组
-  let e: string[]
-  let e: Array<string> 
-
-
-12. tuple  元组
-  # [string, number]  就是固定长度的数组 
-  let g: [string, number]
-  g = ['ss',12]
-
-13. enum   枚举 
-  # 枚举类型
-  enum Gender{
-    Male,
-    Female
-  } 
-  let h: {name: string, gender: Gender}
-  h = {
-    name:'ss',
-    gender: Gender.Male
-  }
-
-14. 类型别名
-  type myTpye = {name: string, age?:number }
-  let j: myTpye
-  j = {name: 'aaa', age:18 }
-
+# 构建生产环境
+yarn build:prod
 ```
 
+## 代码格式检查
 
-## 类
 ```bash
-
-#；类的继承
-class Animal{
-  name: strung
-  constructor(name: string){
-    this.name = name
-  }
-  sayHello() {
-    console.log('动物')
-  }
-}
-
-class Dog extends Amimal{
-  sayHello() {
-    console.log('🐶')
-  }
-}
-
-```
-## 接口
-```bash
-#接口只定义对象的结构，而不考虑实际值
-#在接口中所有的方法都是抽象方法
-interface myInterface {
-  name:string,
-  age:number
-}
-
-class MyClass implements
+# 代码格式检查并自动修复
+yarn lint
 ```
 
-## 范型
-```bash
-# 在定义函数或类时，如果遇到类型不明确的就可以使用泛型 <T> 必须先申明才能使用
-function fn<T>(a: T): T{
-  return a
-}
+## Git 提交规范
 
-```
+- `feat` 增加新功能
+- `fix` 修复问题/BUG
+- `style` 代码风格相关无影响运行结果的
+- `perf` 优化/性能提升
+- `refactor` 重构
+- `revert` 撤销修改
+- `test` 测试相关
+- `docs` 文档/注释
+- `chore` 依赖更新/脚手架配置修改等
+- `workflow` 工作流改进
+- `ci` 持续集成
+- `types` 类型定义文件更改
+- `wip` 开发中
+- `mod` 不确定分类的修改
 
+## 📄 License
 
-## 初始化项目
-引入 vue-router 搭建路由   完成 
-vite 配置 plugins 插件    完成
-首页 页面 侧边栏       完成
-登陆注册页面      完成
-个人信息展示页面   待完成
-····
+[MIT](https://github.com/un-pany/v2-datav-template/blob/main/LICENSE)
 
-
+Copyright (c) 2021 UNPany
