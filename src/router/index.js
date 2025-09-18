@@ -1,34 +1,47 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
-Vue.use(Router)
+// 导入页面组件
+import ChatPage from '@/views/ChatPage.vue'
+import LoginPage from '@/views/LoginPage.vue'
 
-export const constantRoutes = [
+const routes = [
   {
     path: '/',
-    component: () => import('@/views/index')
+    name: 'Chat',
+    component: ChatPage,
+    meta: {
+      title: 'bitFlyer',
+      icon: 'chat'
+    }
   },
-
   {
-    path: '/404',
-    component: () => import('@/views/404')
+    path: '/login',
+    name: 'Login',
+    component: LoginPage,
+    meta: {
+      title: 'bitFlyer - Login',
+      icon: 'login'
+    }
   },
-
-  // 404 页面必须放在末尾
-  { path: '*', redirect: '/404' }
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
+  }
 ]
 
-const createRouter = () => new Router({
-  // mode: 'history',
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes
 })
 
-const router = createRouter()
+// 路由守卫
+router.beforeEach(async (to, from, next) => {
+  // 动态设置页面标题
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
 
-export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // 重置路由
-}
+  next()
+})
 
 export default router
